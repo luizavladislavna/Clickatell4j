@@ -1,5 +1,9 @@
-ClickatellJavaLibrary
+Clickatell Java Library
 =====================
+
+You can see our other libraries and more documentation at the [Clickatell APIs and Libraries Project](http://clickatell.github.io/).
+
+------------------------------------
 
 This is a basic library to demonstrate the use of the Clickatell Rest and HTTP APIs.
 
