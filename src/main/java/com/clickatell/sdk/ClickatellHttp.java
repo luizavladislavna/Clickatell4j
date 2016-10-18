@@ -1,3 +1,8 @@
+package com.clickatell.sdk;
+
+import com.clickatell.entity.RestMessage;
+import com.clickatell.entity.RestMessages;
+import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -9,6 +14,7 @@ import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 /**
@@ -19,7 +25,8 @@ import java.util.Map.Entry;
  * @date Dec 2, 2014
  * @author Dominic Schaff <dominic.schaff@gmail.com>
  */
-public class ClickatellHttp {
+@Slf4j
+public class ClickatellHttp implements ClickatellSdk {
 
 	/**
 	 * @var The URL to use for the base of the HTTP API.
@@ -51,7 +58,7 @@ public class ClickatellHttp {
 	 * @return True if details were accepted, and false otherwise.
 	 * @throws UnknownHostException
 	 */
-	public boolean testAuth() throws UnknownHostException {
+	public boolean checkAuth() throws UnknownHostException {
 		try {
 			// Build Parameters:
 			String urlParameters = "user="
@@ -68,6 +75,17 @@ public class ClickatellHttp {
 		}
 		return false;
 	}
+
+	@Override
+	public RestMessage sendMessage (String number, String message) {
+		return null;
+	}
+
+	@Override
+	public RestMessages sendMessage (List<String> numbers, String message) {
+		return null;
+	}
+
 
 	/**
 	 * This will attempt to get your current balance.
@@ -112,6 +130,7 @@ public class ClickatellHttp {
 	 *             This gets thrown on an auth failure.
 	 * @return A Message object that contains the resulting information.
 	 */
+	/*
 	public Message sendMessage(String number, String messageContent)
 			throws Exception {
 		// Build Parameters:
@@ -141,6 +160,7 @@ public class ClickatellHttp {
 		message.message_id = a[1].trim();
 		return message;
 	}
+	*/
 
 	/**
 	 * This is to send the same message to multiple people. Only use this
@@ -199,6 +219,8 @@ public class ClickatellHttp {
 		return messages.toArray(new Message[0]);
 	}
 
+
+
 	/**
 	 * This will attempt to get the message status of a single message.
 	 *
@@ -211,7 +233,7 @@ public class ClickatellHttp {
 	 * @throws Exception
 	 *             if there is an error with the request.
 	 */
-	public int getMessageStatus(String messageId) throws Exception {
+	public Message getMessageStatus(String messageId) throws Exception {
 		String urlParameters;
 		// Build Parameters:
 		urlParameters = "user=" + URLEncoder.encode(this.userName, "UTF-8")
@@ -232,9 +254,13 @@ public class ClickatellHttp {
 		}
 		// We know the status will always be the fourth part:
 		// Syntax: ID: xxx Status: xxx
+		log.debug("result: {}", result);
 		String[] a = result.split(" ");
-		return Integer.parseInt(a[3].trim());
+		Message msg = new Message(a[3].trim(),  a[1].trim());
+		return msg;
 	}
+
+
 
 	/**
 	 * This will get the status and charge of the message given by the
@@ -288,7 +314,7 @@ public class ClickatellHttp {
 	 * @throws Exception
 	 *             If there was something wrong with the request.
 	 */
-	public int stopMessage(String messageId) throws Exception {
+	public Message stopMessage(String messageId) throws Exception {
 		String urlParameters;
 		// Build Parameters:
 		urlParameters = "user=" + URLEncoder.encode(this.userName, "UTF-8")
@@ -310,8 +336,10 @@ public class ClickatellHttp {
 		// Split the result we know that the status will always the fourth
 		// part:
 		// Format: ID: xxx Status: xxx
+
 		String[] a = result.split(" ");
-		return Integer.parseInt(a[3].trim());
+		Message msg = new Message(a[3].trim(), a[1].trim());
+		return msg;
 	}
 
 	/**
@@ -478,32 +506,6 @@ public class ClickatellHttp {
 			if (connection != null) {
 				connection.disconnect();
 			}
-		}
-	}
-
-	/**
-	 * This is the Message class that gets used as return values for some of the
-	 * functions.
-	 *
-	 * @author Dominic Schaff <dominic.schaff@gmail.com>
-	 *
-	 */
-	public class Message {
-		public String number = null, message_id = null, content = null,
-				charge = null, status = null, error = null;
-
-		public Message(String message_id) {
-			this.message_id = message_id;
-		}
-
-		public Message() {
-		}
-
-		public String toString() {
-			if (message_id != null) {
-				return number + ": " + message_id;
-			}
-			return number + ": " + error;
 		}
 	}
 }

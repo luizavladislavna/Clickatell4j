@@ -22,22 +22,23 @@ ClickatellRest clickRest = new ClickatellRest(API_KEY);
 To send one message:
 
 ```
-ClickatellHttp.Message response = click.sendMessage("27821234567",
+Message response = click.sendMessage("27821234567",
                     "Hello, this is a test message!");
-ClickatellRest.Message response = clickRest.sendMessage("27821234567",
+Message response = clickRest.sendMessage("27821234567",
                     "Hello, this is a test message!");
 ```
 
 To get the status of a message:
 
 ```
-int status = click.getMessageStatus("b305c3445e37626ffabb21edc9320e1e");
+Message response = click.getMessageStatus("b305c3445e37626ffabb21edc9320e1e");
+int status = response.statusToInt();
 ```
 
 To get the cost of a message:
 
 ```
-ClickatellHttp.Message reply = click.getMessageCharge("b305c3445e37626ffabb21edc9320e1e");
+Message reply = click.getMessageCharge("b305c3445e37626ffabb21edc9320e1e");
 System.out.println("Charge: " + reply.charge);
 System.out.println("Status: " + reply.status);
 ```
@@ -45,7 +46,7 @@ System.out.println("Status: " + reply.status);
 To get the cost and status of message in REST:
 
 ```
-ClickatellRest.Message msg = clickRest.getMessageStatus(response.message_id);
+Message msg = clickRest.getMessageStatus(response.message_id);
 System.out.println("ID:" + msg.message_id);
 System.out.println("Status:" + msg.status);
 System.out.println("Status Description:" + msg.statusString);
@@ -74,13 +75,48 @@ Testing Sample Code
 -------------------
 
 Compile:
-
 ```
-javac -cp json-simple-1.1.1.jar ClickatellRest.java ClickatellHttp.java Runner.java
+mvn clean compile 
 ```
 
-Run:
-
+Update Clickatell configuration
 ```
-java -cp .:json-simple-1.1.1.jar Runner
+echo "" > src/test/resources/test.properties
+echo "APIID       = YOUR_APIID"     >> src/test/resources/test.properties
+echo "USERNAME    = YOUR_USERNAME"  >> src/test/resources/test.properties
+echo "PASSWORD    = YOUR_PASSWORD"  >> src/test/resources/test.properties
+echo "APIKEY      = YOUR_APIKEY"    >> src/test/resources/test.properties
+```
+
+Compile Tests:
+```
+mvn test-compile
+```
+
+
+Run Tests:
+```
+mvn surefire:test  -Dtest=com.clickatell.example.run.TestHttp#testAuth
+mvn surefire:test  -Dtest=com.clickatell.example.run.TestHttp
+mvn surefire:test  -Dtest=com.clickatell.example.run.TestRest
+```
+
+Install an artifact into your local repository:
+```
+mvn clean compile install -Dmaven.test.skip=true
+```
+
+Usage in maven projects:
+------------------------
+
+pom.xml
+```
+<dependencies>
+    ...
+    <dependency>
+        <groupId>com.clickatell.sdk</groupId>
+        <artifactId>clickatell-java</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
+<dependencies>
 ```
