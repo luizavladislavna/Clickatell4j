@@ -53,7 +53,7 @@ pom.xml
     ...
     <dependency>
         <groupId>com.clickatell.sdk</groupId>
-        <artifactId>clickatell-java</artifactId>
+        <artifactId>clickatell4j</artifactId>
         <version>1.0-SNAPSHOT</version>
     </dependency>
 <dependencies>
