@@ -2,6 +2,7 @@ Clickatell Java Library for **REST API**
 ========================================
 
 You can see other libraries and more official documentation at the [Clickatell APIs and Libraries Project](http://clickatell.github.io/).
+Refactored from: https://github.com/clickatell/clickatell-java
 
 ------------------------------------
 
