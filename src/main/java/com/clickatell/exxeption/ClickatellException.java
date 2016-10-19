@@ -1,8 +1,12 @@
 package com.clickatell.exxeption;
 
-import com.clickatell.entity.IJsonEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-@IJsonEntity
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonSerialize
 public abstract class ClickatellException extends RuntimeException {
 
     private static final long serialVersionUID = 2516935680980388130L;

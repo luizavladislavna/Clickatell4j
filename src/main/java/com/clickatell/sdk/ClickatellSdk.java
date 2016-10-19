@@ -1,10 +1,9 @@
 package com.clickatell.sdk;
 
-import com.clickatell.entity.RestMessage;
-import com.clickatell.entity.RestMessages;
+import com.clickatell.entity.CoverageResponse;
+import com.clickatell.entity.Message;
+import com.clickatell.entity.AcceptedMessages;
 
-import java.net.UnknownHostException;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -12,29 +11,22 @@ import java.util.List;
  */
 public interface ClickatellSdk {
 
-	double getBalance () throws Exception;
+	Message sendMessage (String number, String message);
 
-	boolean checkAuth () throws UnknownHostException;
+	Message sendMessage (String number, String message, String from);
 
-	double getCoverage (String number) throws Exception;
+	AcceptedMessages sendMessage (List<String> numbers, String message);
 
-	//Message sendMessage (String number, String message) throws Exception;
+	AcceptedMessages sendMessage (List<String> numbers, String message, String from);
 
-	//Message[] sendMessage (String[] numbers, String message) throws Exception;
+	CoverageResponse getMessageCoverage (String number);
 
-	Message getMessageStatus (String messageId) throws Exception;
+	double getMessageCoverageCharge (String number);
 
-	Message stopMessage (String messageId) throws Exception;
+	double getBalance ();
 
-	Message[] sendAdvancedMessage (String[] numbers, String message,
-	                               HashMap<String, String> features) throws Exception;
+	Message getMessageStatus (String messageId);
 
+	Message stopMessage (String messageId);
 
-	Message getMessageCharge (String messageId) throws Exception;
-
-
-	// Refactored:
-	RestMessage sendMessage (String number, String message);
-
-	RestMessages sendMessage (List<String> numbers, String message);
 }
